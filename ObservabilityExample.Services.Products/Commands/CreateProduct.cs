@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using ObservabilityExample.Infrastructure.RabbitMq;
 using ObservabilityExample.Infrastructure.Types;
 using ObservabilityExample.Services.Products.Domain;
+using ObservabilityExample.Services.Products.Events;
 
 namespace ObservabilityExample.Services.Products.Commands
 {
@@ -37,10 +38,12 @@ namespace ObservabilityExample.Services.Products.Commands
     public class CreateProductHandler : IRequestHandler<CreateProduct>
     {
         private readonly ProductContext productContext;
+        private readonly IBusPublisher busPublisher;
 
-        public CreateProductHandler(ProductContext productContext)
+        public CreateProductHandler(ProductContext productContext, IBusPublisher busPublisher)
         {
             this.productContext = productContext;
+            this.busPublisher = busPublisher;
         }
 
         public async Task<Unit> Handle(CreateProduct request, CancellationToken cancellationToken)
@@ -51,6 +54,11 @@ namespace ObservabilityExample.Services.Products.Commands
             await productContext.Products.AddAsync(product, cancellationToken);
 
             await productContext.SaveChangesAsync(cancellationToken);
+
+            await busPublisher.PublishAsync(new ProductCreated(request.Id, request.Name, request.Description,
+                            request.Vendor, request.Price, request.Quantity,request.CorrelationContext),
+                    new RabbitMqOptions {ExchangeName = "product", RoutingKey = "product_created"},
+                    request.CorrelationContext);
             
             return Unit.Value;
         }
