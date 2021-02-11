@@ -1,6 +1,6 @@
 ﻿using System.Collections.Generic;
 
-namespace ObservabilityExample.Services.Products
+namespace ObservabilityExample.Infrastructure.Jaeger
 {
     public class JaegerOptions
     {
