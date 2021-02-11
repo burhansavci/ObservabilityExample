@@ -2,12 +2,12 @@
 using System.Threading.Tasks;
 using MediatR;
 using ObservabilityExample.Infrastructure.Types;
-using RawRabbit.Configuration.Exchange;
 
 namespace ObservabilityExample.Infrastructure.RabbitMq
 {
     public interface IBusSubscriber
     {
-        Task SubscribeAsync<TRequest>(RabbitMqOptions options, CancellationToken ct = default) where TRequest : IRequest, ICommand;
+        public Task SubscribeAsync<TCommand>(RabbitMqOptions options, CancellationToken ct = default)
+                where TCommand : IRequest, ICommand;
     }
 }

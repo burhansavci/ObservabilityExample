@@ -13,9 +13,20 @@ namespace ObservabilityExample.Infrastructure.RabbitMq
         {
             this.busClient = busClient;
         }
-        
-        public async Task PublishAsync<TRequest>(TRequest request, ICorrelationContext context)
+
+        public async Task PublishAsync<TRequest>(TRequest request, RabbitMqOptions options, ICorrelationContext context)
                 where TRequest : IRequest =>
-                await busClient.PublishAsync(request, ctx => ctx.UseMessageContext(context));
+                await busClient.PublishAsync(request, ctx => ctx.UseMessageContext(context).UsePublishConfiguration(cfg =>
+                {
+                    if (options.ExchangeName != default)
+                    {
+                        cfg.OnExchange(options.ExchangeName);
+                    }
+
+                    if (options.RoutingKey != default)
+                    {
+                        cfg.WithRoutingKey(options.RoutingKey);
+                    }
+                }));
     }
 }

@@ -7,7 +7,6 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Logging;
 using ObservabilityExample.Infrastructure.Types;
 using RawRabbit;
-using RawRabbit.Configuration.Exchange;
 
 namespace ObservabilityExample.Infrastructure.RabbitMq
 {
@@ -15,28 +14,28 @@ namespace ObservabilityExample.Infrastructure.RabbitMq
     {
         private readonly IServiceProvider serviceProvider;
         private readonly IBusClient busClient;
-        private readonly IMediator mediator;
         private readonly ILogger<BusSubscriber> logger;
-
-
+        
         public BusSubscriber(IApplicationBuilder app)
         {
             logger = app.ApplicationServices.GetService<ILogger<BusSubscriber>>();
             serviceProvider = app.ApplicationServices.GetService<IServiceProvider>();
             busClient = serviceProvider.GetService<IBusClient>();
-            mediator = serviceProvider.GetService<IMediator>();
         }
 
-        public Task SubscribeAsync<TCommand>(RabbitMqOptions options, CancellationToken ct = default) where TCommand : IRequest, ICommand
+        public Task SubscribeAsync<TCommand>(RabbitMqOptions options, CancellationToken ct = default)
+                where TCommand : IRequest, ICommand
         {
-            return busClient.SubscribeAsync<TCommand>(async msg =>
+            return busClient.SubscribeAsync<TCommand, CorrelationContext>(async (msg, correlationContext) =>
                     {
                         var messageName = msg.GetType().Name;
-                        logger.LogInformation($"Handling a message: '{messageName}' with correlation id: '{msg.CorrelationContext.Id}'.");
-
+                        logger.LogInformation($"Handling a message: '{messageName}' with correlation id: '{correlationContext.Id}'.");
+                        
+                        using var scope = serviceProvider.CreateScope();
+                        var mediator = scope.ServiceProvider.GetService<IMediator>();
                         await mediator.Send(msg, ct);
-
-                        logger.LogInformation($"Handled a message: '{messageName}' with correlation id: '{msg.CorrelationContext.Id}'.");
+                        
+                        logger.LogInformation($"Handled a message: '{messageName}' with correlation id: '{correlationContext.Id}'.");
                     },
                     ctx =>
                             ctx.UseSubscribeConfiguration(cfg =>

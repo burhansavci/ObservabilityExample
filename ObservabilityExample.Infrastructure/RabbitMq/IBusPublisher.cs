@@ -5,6 +5,6 @@ namespace ObservabilityExample.Infrastructure.RabbitMq
 {
     public interface IBusPublisher
     {
-        Task PublishAsync<TRequest>(TRequest request, ICorrelationContext context) where TRequest : IRequest;
+        Task PublishAsync<TRequest>(TRequest request, RabbitMqOptions options, ICorrelationContext context) where TRequest : IRequest;
     }
 }

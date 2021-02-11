@@ -1,9 +1,8 @@
-﻿using RawRabbit.Configuration;
-using RawRabbit.Configuration.Exchange;
+﻿using RawRabbit.Configuration.Exchange;
 
 namespace ObservabilityExample.Infrastructure.RabbitMq
 {
-    public class RabbitMqOptions : RawRabbitConfiguration
+    public class RabbitMqOptions
     {
         public string ExchangeName { get; set; }
         public string QueueName { get; set; }
