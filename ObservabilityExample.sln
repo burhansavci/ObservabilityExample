@@ -4,6 +4,8 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Servic
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Infrastructure", "ObservabilityExample.Infrastructure\ObservabilityExample.Infrastructure.csproj", "{64A3DFB8-1B9C-493D-B29D-67DDCFF3C5CD}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Services.Customers", "ObservabilityExample.Services.Customers\ObservabilityExample.Services.Customers.csproj", "{C22924D7-2ADF-4B95-8217-3346C8054836}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -18,5 +20,9 @@ Global
 		{64A3DFB8-1B9C-493D-B29D-67DDCFF3C5CD}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{64A3DFB8-1B9C-493D-B29D-67DDCFF3C5CD}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{64A3DFB8-1B9C-493D-B29D-67DDCFF3C5CD}.Release|Any CPU.Build.0 = Release|Any CPU
+		{C22924D7-2ADF-4B95-8217-3346C8054836}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{C22924D7-2ADF-4B95-8217-3346C8054836}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{C22924D7-2ADF-4B95-8217-3346C8054836}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{C22924D7-2ADF-4B95-8217-3346C8054836}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 EndGlobal
