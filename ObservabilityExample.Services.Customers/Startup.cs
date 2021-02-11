@@ -7,8 +7,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using ObservabilityExample.Infrastructure.RabbitMq;
 using ObservabilityExample.Services.Customers.Commands;
 using ObservabilityExample.Services.Customers.Domain;
+using ObservabilityExample.Services.Customers.Events;
 
 namespace ObservabilityExample.Services.Customers
 {
@@ -29,14 +31,14 @@ namespace ObservabilityExample.Services.Customers
             {
                 c.SwaggerDoc("v1", new OpenApiInfo {Title = "ObservabilityExample.Services.Customers", Version = "v1"});
             });
-            
+
             services.AddDbContext<CustomerContext>(options =>
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging();
             });
-            
-            services.AddMediatR(typeof(CreateCustomer).GetTypeInfo().Assembly);
-            
+
+            services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
+            services.AddRabbitMq(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -52,6 +54,9 @@ namespace ObservabilityExample.Services.Customers
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseRabbitMq().SubscribeAsync<ProductCreated>(new RabbitMqOptions
+                    {ExchangeName = "product", QueueName = "product_to_customer_queue", RoutingKey = "product_created", PrefetchCount = 10});
 
             app.UseAuthorization();
 

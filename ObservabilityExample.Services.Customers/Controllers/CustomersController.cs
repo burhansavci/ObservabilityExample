@@ -10,11 +10,11 @@ namespace ObservabilityExample.Services.Customers.Controllers
 {
     [ApiController]
     [Route("[controller]")]
-    public class ProductsController : ControllerBase
+    public class CustomersController : ControllerBase
     {
         private readonly IMediator mediator;
 
-        public ProductsController(IMediator mediator)
+        public CustomersController(IMediator mediator)
         {
             this.mediator = mediator;
         }
