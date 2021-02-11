@@ -7,8 +7,8 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using ObservabilityExample.Infrastructure.Jaeger;
 using ObservabilityExample.Infrastructure.RabbitMq;
-using ObservabilityExample.Services.Products.Commands;
 using ObservabilityExample.Services.Products.Domain;
 
 namespace ObservabilityExample.Services.Products
@@ -35,9 +35,11 @@ namespace ObservabilityExample.Services.Products
             {
                 options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging();
             });
-            
+
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
             services.AddRabbitMq(Configuration);
+            services.AddJaeger(Configuration);
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
