@@ -15,16 +15,16 @@ using RawRabbit.Pipe.Middleware;
 
 namespace ObservabilityExample.Infrastructure.Jaeger
 {
-    public class JaegerSubscribersStagedMiddleware : StagedMiddleware
+    public class JaegerSubscriberStagedMiddleware : StagedMiddleware
     {
         public override string StageMarker =>  RawRabbit.Pipe.StageMarker.MessageDeserialized;
 
         private static readonly ActivitySource ActivitySource = new("JaegerStagedMiddleware");
         private static readonly TextMapPropagator Propagator = new TraceContextPropagator();
         
-        private readonly ILogger<JaegerSubscribersStagedMiddleware> logger;
+        private readonly ILogger<JaegerSubscriberStagedMiddleware> logger;
 
-        public JaegerSubscribersStagedMiddleware(ILogger<JaegerSubscribersStagedMiddleware> logger) => this.logger = logger;
+        public JaegerSubscriberStagedMiddleware(ILogger<JaegerSubscriberStagedMiddleware> logger) => this.logger = logger;
         
         public override async Task InvokeAsync(IPipeContext context, CancellationToken token = new CancellationToken())
         {

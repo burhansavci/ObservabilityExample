@@ -39,7 +39,7 @@ namespace ObservabilityExample.Infrastructure.Jaeger
         public static IClientBuilder UseJaeger(this IClientBuilder builder)
         {
             builder.Register(pipe => pipe.Use<JaegerPublisherStagedMiddleware>());
-            builder.Register(pipe => pipe.Use<JaegerSubscribersStagedMiddleware>());
+            builder.Register(pipe => pipe.Use<JaegerSubscriberStagedMiddleware>());
             return builder;
         }
 
