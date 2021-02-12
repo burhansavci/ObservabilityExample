@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
+using ObservabilityExample.Infrastructure.Jaeger;
 using ObservabilityExample.Infrastructure.RabbitMq;
 using ObservabilityExample.Services.Customers.Commands;
 using ObservabilityExample.Services.Customers.Domain;
@@ -39,6 +40,7 @@ namespace ObservabilityExample.Services.Customers
 
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
             services.AddRabbitMq(Configuration);
+            services.AddJaeger(Configuration);
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

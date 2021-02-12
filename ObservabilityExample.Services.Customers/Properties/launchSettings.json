@@ -20,7 +20,7 @@
     "ObservabilityExample.Services.Customers": {
       "commandName": "Project",
       "dotnetRunMessages": "true",
-      "launchBrowser": true,
+      "launchBrowser": false,
       "launchUrl": "swagger",
       "applicationUrl": "https://localhost:5011;http://localhost:5010",
       "environmentVariables": {

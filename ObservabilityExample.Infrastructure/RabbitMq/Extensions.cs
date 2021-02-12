@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using ObservabilityExample.Infrastructure.Jaeger;
 using RawRabbit.Configuration;
 using RawRabbit.DependencyInjection.ServiceCollection;
 using RawRabbit.Enrichers.MessageContext;
@@ -23,7 +24,8 @@ namespace ObservabilityExample.Infrastructure.RabbitMq
                     ClientConfiguration = options,
                     Plugins = p => p
                                   .UseMessageContext<CorrelationContext>()
-                                  .UseContextForwarding(),
+                                  .UseContextForwarding()
+                                  .UseJaeger()
 
             }).AddSingleton<IBusPublisher, BusPublisher>();
             

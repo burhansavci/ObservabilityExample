@@ -4,6 +4,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using OpenTelemetry.Resources;
 using OpenTelemetry.Trace;
+using RawRabbit.Instantiation;
 
 namespace ObservabilityExample.Infrastructure.Jaeger
 {
@@ -18,6 +19,7 @@ namespace ObservabilityExample.Infrastructure.Jaeger
                                                       .SetResourceBuilder(ResourceBuilder.CreateDefault()
                                                                                          .AddService(jaegerOptions.ServiceName))
                                                       .SetSampler(GetSampler(jaegerOptions))
+                                                      .AddSource("JaegerStagedMiddleware")
                                                       .AddJaegerExporter(c =>
                                                        {
                                                            c.AgentHost = jaegerOptions.Host;
@@ -32,6 +34,13 @@ namespace ObservabilityExample.Infrastructure.Jaeger
                                                       .AddHttpClientInstrumentation());
 
             return services;
+        }
+
+        public static IClientBuilder UseJaeger(this IClientBuilder builder)
+        {
+            builder.Register(pipe => pipe.Use<JaegerPublisherStagedMiddleware>());
+            builder.Register(pipe => pipe.Use<JaegerSubscribersStagedMiddleware>());
+            return builder;
         }
 
         private static Sampler GetSampler(JaegerOptions jaegerOptions)
