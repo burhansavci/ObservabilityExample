@@ -8,6 +8,7 @@ using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.OpenApi.Models;
 using ObservabilityExample.Infrastructure.Jaeger;
+using ObservabilityExample.Infrastructure.Prometheus;
 using ObservabilityExample.Infrastructure.RabbitMq;
 using ObservabilityExample.Services.Products.Domain;
 
@@ -39,6 +40,7 @@ namespace ObservabilityExample.Services.Products
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
             services.AddRabbitMq(Configuration);
             services.AddJaeger(Configuration);
+            services.AddPrometheus(Configuration);
 
         }
 
@@ -57,6 +59,7 @@ namespace ObservabilityExample.Services.Products
             app.UseRouting();
 
             app.UseRabbitMq();
+            app.UsePrometheus();
 
             app.UseAuthorization();
 
