@@ -31,7 +31,10 @@ namespace ObservabilityExample.Infrastructure.Jaeger
                                                                x.Filter = context =>
                                                                        !jaegerOptions.ExcludePaths.Contains(context.Request.Path.Value,
                                                                                StringComparer.OrdinalIgnoreCase))
-                                                      .AddHttpClientInstrumentation());
+                                                      .AddHttpClientInstrumentation(x =>
+                                                               x.Filter = context =>
+                                                                       !jaegerOptions.ExcludePaths.Contains(context.RequestUri?.Authority,
+                                                                               StringComparer.OrdinalIgnoreCase)));
 
             return services;
         }
