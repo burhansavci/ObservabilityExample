@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ObservabilityExample.Infrastructure.Logging;
 using ObservabilityExample.Services.Products.Domain;
 
 namespace ObservabilityExample.Services.Products
@@ -36,6 +37,6 @@ namespace ObservabilityExample.Services.Products
                     .ConfigureWebHostDefaults(webBuilder =>
                      {
                          webBuilder.UseStartup<Startup>();
-                     });
+                     }).UseLogging();
     }
 }

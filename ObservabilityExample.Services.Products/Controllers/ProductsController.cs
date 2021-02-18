@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Logging;
 using ObservabilityExample.Infrastructure.RabbitMq;
 using ObservabilityExample.Infrastructure.Types;
 using ObservabilityExample.Services.Products.Commands;
@@ -13,10 +14,11 @@ namespace ObservabilityExample.Services.Products.Controllers
     public class ProductsController : ControllerBase
     {
         private readonly IMediator mediator;
-
-        public ProductsController(IMediator mediator)
+        private readonly ILogger<ProductsController> logger;
+        public ProductsController(IMediator mediator, ILogger<ProductsController> logger)
         {
             this.mediator = mediator;
+            this.logger = logger;
         }
 
         [HttpGet("ping")]
@@ -25,6 +27,7 @@ namespace ObservabilityExample.Services.Products.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(CreateProduct request)
         {
+            logger.LogInformation("Create product http request is received");
             request.CorrelationContext = GetContext<CreateProduct>(request.Id, "products");
             await mediator.Send(request);
             return Ok();

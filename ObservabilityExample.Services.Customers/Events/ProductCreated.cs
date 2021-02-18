@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ObservabilityExample.Infrastructure.RabbitMq;
 using ObservabilityExample.Infrastructure.Types;
@@ -37,10 +39,12 @@ namespace ObservabilityExample.Services.Customers.Events
     public class ProductCreatedHandler : IRequestHandler<ProductCreated>
     {
         private readonly CustomerContext customerContext;
+        private readonly ILogger<ProductCreatedHandler> logger;
 
-        public ProductCreatedHandler(CustomerContext customerContext)
+        public ProductCreatedHandler(CustomerContext customerContext, ILogger<ProductCreatedHandler> logger)
         {
             this.customerContext = customerContext;
+            this.logger = logger;
         }
 
         public async Task<Unit> Handle(ProductCreated request, CancellationToken cancellationToken)
@@ -49,9 +53,10 @@ namespace ObservabilityExample.Services.Customers.Events
                     request.Vendor, request.Price, request.Quantity);
 
             await customerContext.Products.AddAsync(product, cancellationToken);
-
+            
             await customerContext.SaveChangesAsync(cancellationToken);
-
+            logger.LogInformation("Product is add to {Db}", customerContext.Database.GetDbConnection().Database);
+            
             return Unit.Value;
         }
     }

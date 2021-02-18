@@ -7,6 +7,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
+using ObservabilityExample.Infrastructure.Logging;
 using ObservabilityExample.Services.Customers.Domain;
 
 namespace ObservabilityExample.Services.Customers
@@ -39,6 +40,6 @@ namespace ObservabilityExample.Services.Customers
                     .ConfigureWebHostDefaults(webBuilder =>
                      {
                          webBuilder.UseStartup<Startup>();
-                     });
+                     }).UseLogging();
     }
 }
