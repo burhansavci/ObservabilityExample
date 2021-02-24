@@ -2,6 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 using Newtonsoft.Json;
 using ObservabilityExample.Infrastructure.RabbitMq;
 using ObservabilityExample.Infrastructure.Types;
@@ -36,10 +38,12 @@ namespace ObservabilityExample.Services.Customers.Commands
     public class CreateCustomerHandler : IRequestHandler<CreateCustomer>
     {
         private readonly CustomerContext customerContext;
+        private readonly ILogger<CreateCustomerHandler> logger;
 
-        public CreateCustomerHandler(CustomerContext customerContext)
+        public CreateCustomerHandler(CustomerContext customerContext, ILogger<CreateCustomerHandler> logger)
         {
             this.customerContext = customerContext;
+            this.logger = logger;
         }
 
         public async Task<Unit> Handle(CreateCustomer request, CancellationToken cancellationToken)
@@ -50,6 +54,7 @@ namespace ObservabilityExample.Services.Customers.Commands
             await customerContext.Customers.AddAsync(customer, cancellationToken);
 
             await customerContext.SaveChangesAsync(cancellationToken);
+            logger.LogInformation("Customer is added to {Db}", customerContext.Database.GetDbConnection().Database);
 
             return Unit.Value;
         }

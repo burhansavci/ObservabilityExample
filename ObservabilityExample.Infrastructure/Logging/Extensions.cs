@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Linq;
 using Microsoft.Extensions.Hosting;
+using Microsoft.Extensions.Logging;
 using Serilog;
 using Serilog.Events;
 using Serilog.Filters;
-using Serilog.Formatting.Compact;
 using Serilog.Formatting.Json;
 
 namespace ObservabilityExample.Infrastructure.Logging
@@ -18,6 +18,7 @@ namespace ObservabilityExample.Infrastructure.Logging
                 var seqOptions = context.Configuration.GetOptions<SeqOptions>("Seq");
                 var serilogOptions = context.Configuration.GetOptions<SerilogOptions>("Serilog");
                 var fileOptions = context.Configuration.GetOptions<FileOptions>("File");
+                var fluentdOptions = context.Configuration.GetOptions<FluentdOptions>("Fluentd");
 
                 if (!Enum.TryParse<LogEventLevel>(serilogOptions.Level, true, out var level))
                     level = LogEventLevel.Information;
@@ -27,22 +28,25 @@ namespace ObservabilityExample.Infrastructure.Logging
                                    .MinimumLevel.Is(level)
                                    .Enrich.WithProperty("Environment", context.HostingEnvironment.EnvironmentName)
                                    .Enrich.WithProperty("ApplicationName", applicationName);
-
                 serilogOptions.ExcludePaths?.ToList().ForEach(p => loggerConfiguration.Filter
                                                                                       .ByExcluding(Matching.WithProperty<string>("RequestPath",
                                                                                                n => n.EndsWith(p))));
                 Configure(loggerConfiguration, seqOptions, serilogOptions,
-                        fileOptions);
-            });
+                        fileOptions, fluentdOptions);
+                
+            }).ConfigureLogging((_, config) => { config.ClearProviders(); });
 
         private static void Configure(LoggerConfiguration loggerConfiguration, SeqOptions seqOptions, SerilogOptions serilogOptions,
-                                      FileOptions fileOptions)
+                                      FileOptions fileOptions, FluentdOptions fluentdOptions)
         {
             if (seqOptions.Enabled)
                 loggerConfiguration.WriteTo.Seq(seqOptions.Url, apiKey: seqOptions.ApiKey);
 
             if (serilogOptions.ConsoleEnabled)
                 loggerConfiguration.WriteTo.Console();
+
+            if (fluentdOptions.Enabled)
+                loggerConfiguration.WriteTo.Fluentd(fluentdOptions.Host, fluentdOptions.Port, fluentdOptions.Tag);
 
             if (fileOptions.Enabled)
             {

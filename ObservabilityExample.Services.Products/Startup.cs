@@ -34,7 +34,7 @@ namespace ObservabilityExample.Services.Products
 
             services.AddDbContext<ProductContext>(options =>
             {
-                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")).EnableSensitiveDataLogging();
+                options.UseSqlServer(Configuration.GetConnectionString("DefaultConnection"));
             });
 
             services.AddMediatR(typeof(Startup).GetTypeInfo().Assembly);
