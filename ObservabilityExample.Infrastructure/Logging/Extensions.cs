@@ -6,6 +6,7 @@ using Serilog;
 using Serilog.Events;
 using Serilog.Filters;
 using Serilog.Formatting.Json;
+using Serilog.Sinks.Http.BatchFormatters;
 
 namespace ObservabilityExample.Infrastructure.Logging
 {
@@ -19,6 +20,8 @@ namespace ObservabilityExample.Infrastructure.Logging
                 var serilogOptions = context.Configuration.GetOptions<SerilogOptions>("Serilog");
                 var fileOptions = context.Configuration.GetOptions<FileOptions>("File");
                 var fluentdOptions = context.Configuration.GetOptions<FluentdOptions>("Fluentd");
+                var httpOptions = context.Configuration.GetOptions<HttpOptions>("Http");
+
 
                 if (!Enum.TryParse<LogEventLevel>(serilogOptions.Level, true, out var level))
                     level = LogEventLevel.Information;
@@ -32,12 +35,11 @@ namespace ObservabilityExample.Infrastructure.Logging
                                                                                       .ByExcluding(Matching.WithProperty<string>("RequestPath",
                                                                                                n => n.EndsWith(p))));
                 Configure(loggerConfiguration, seqOptions, serilogOptions,
-                        fileOptions, fluentdOptions);
-                
+                        fileOptions, fluentdOptions, httpOptions);
             }).ConfigureLogging((_, config) => { config.ClearProviders(); });
 
         private static void Configure(LoggerConfiguration loggerConfiguration, SeqOptions seqOptions, SerilogOptions serilogOptions,
-                                      FileOptions fileOptions, FluentdOptions fluentdOptions)
+                                      FileOptions fileOptions, FluentdOptions fluentdOptions, HttpOptions httpOptions)
         {
             if (seqOptions.Enabled)
                 loggerConfiguration.WriteTo.Seq(seqOptions.Url, apiKey: seqOptions.ApiKey);
@@ -47,6 +49,9 @@ namespace ObservabilityExample.Infrastructure.Logging
 
             if (fluentdOptions.Enabled)
                 loggerConfiguration.WriteTo.Fluentd(fluentdOptions.Host, fluentdOptions.Port, fluentdOptions.Tag);
+            
+            if (httpOptions.Enabled)
+                loggerConfiguration.WriteTo.Http(httpOptions.Url, batchFormatter: new ArrayBatchFormatter());
 
             if (fileOptions.Enabled)
             {

@@ -54,7 +54,7 @@ namespace ObservabilityExample.Services.Customers.Commands
             await customerContext.Customers.AddAsync(customer, cancellationToken);
 
             await customerContext.SaveChangesAsync(cancellationToken);
-            logger.LogInformation("Customer is added to {Db}", customerContext.Database.GetDbConnection().Database);
+            logger.LogInformation("Customer is added to {@Db}", customerContext.Database.GetDbConnection().Database);
 
             return Unit.Value;
         }
