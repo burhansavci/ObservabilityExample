@@ -1,10 +1,10 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Services.Products", "ObservabilityExample.Services.Products\ObservabilityExample.Services.Products.csproj", "{30D19810-807C-4693-9B05-A6568F09CFD5}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Services.Products", "src\ObservabilityExample.Services.Products\ObservabilityExample.Services.Products.csproj", "{30D19810-807C-4693-9B05-A6568F09CFD5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Infrastructure", "ObservabilityExample.Infrastructure\ObservabilityExample.Infrastructure.csproj", "{64A3DFB8-1B9C-493D-B29D-67DDCFF3C5CD}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Infrastructure", "src\ObservabilityExample.Infrastructure\ObservabilityExample.Infrastructure.csproj", "{64A3DFB8-1B9C-493D-B29D-67DDCFF3C5CD}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Services.Customers", "ObservabilityExample.Services.Customers\ObservabilityExample.Services.Customers.csproj", "{C22924D7-2ADF-4B95-8217-3346C8054836}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ObservabilityExample.Services.Customers", "src\ObservabilityExample.Services.Customers\ObservabilityExample.Services.Customers.csproj", "{C22924D7-2ADF-4B95-8217-3346C8054836}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
