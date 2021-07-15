@@ -1,0 +1,29 @@
+﻿version: "3.7"
+
+services:
+  products-service:
+    build:
+      context: ../.
+      dockerfile: Dockerfile-Products
+    container_name: products-service
+    restart: unless-stopped
+    ports:
+      - 5000:80
+    networks:
+      - observability-example
+
+  customers-service:
+    build:
+      context: ../.
+      dockerfile: Dockerfile-Customers
+    container_name: customers-service
+    restart: unless-stopped
+    ports:
+      - 5010:80
+    networks:
+      - observability-example
+
+networks:
+  observability-example:
+    name: observability-example-network
+    external: true

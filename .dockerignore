@@ -1,0 +1,7 @@
+﻿bin/
+obj/
+out/
+src/ObservabilityExample.Services.Customers/bin/
+src/ObservabilityExample.Services.Customers/obj/
+src/ObservabilityExample.Services.Products/bin/
+src/ObservabilityExample.Services.Products/obj/
