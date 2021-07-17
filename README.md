@@ -47,8 +47,7 @@ You can create a product using swagger at this link: http://localhost:5000/swagg
 Then you can see traces using Jaeger at this link: http://localhost:16686/search
 
 ![tracing-1](assets/tracing-1.png)
-
-​                                                                                     *Example of showing traces using Jaeger*
+<p align="center"><em>Example of showing traces using Jaeger</em></p
 
 ##### Metrics
 
